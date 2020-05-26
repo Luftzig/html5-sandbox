@@ -61,9 +61,7 @@
   <script src="js/main.js"></script>
   <h1>Vibration API</h1>
   <div class="buttons-wrapper">
-    <button id="button-play-v-once" class="button-demo">Vibrate Once</button>
-    <button id="button-play-v-thrice" class="button-demo">Vibrate Thrice</button>
-    <button id="button-stop-v" class="button-demo">Stop</button>
+    <label><input id="bpm" type="number" value="60"/> BPM </label>
     <button id="continuous" class="button-demo">Start</button>
   </div>
   <span id="v-unsupported" class="hidden">API not supported</span>
@@ -76,19 +74,13 @@
         document.getElementById(elementId).setAttribute('disabled', 'disabled');
       });
     } else {
-      document.getElementById('button-play-v-once').addEventListener('click', function() {
-        navigator.vibrate(1000);
-      });
-      document.getElementById('button-play-v-thrice').addEventListener('click', function() {
-        navigator.vibrate([1000, 500, 1000, 500, 2000]);
-      });
-      document.getElementById('button-stop-v').addEventListener('click', function() {
-        navigator.vibrate(0);
-      });
       document.getElementById('continuous').addEventListener('click', function () {
         if (interval == null) {
+          const bpm = parseInt(document.getElementById("bpm").value)
+          const beatSizeMs = ( 1000 / (bpm / 60) )
+          console.log("Using variable BPM", bpm, beatSizeMs)
           interval = setInterval(function() {
-            navigator.vibrate([250,250,250,250])
+            navigator.vibrate([].fill([beatSizeMs, 3 * beatSizeMs], 200).flat(1))
           }, 1000)
           document.getElementById('continuous').innerText = 'Stop'
         } else {
