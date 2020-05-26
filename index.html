@@ -64,14 +64,12 @@
     <button id="button-play-v-once" class="button-demo">Vibrate Once</button>
     <button id="button-play-v-thrice" class="button-demo">Vibrate Thrice</button>
     <button id="button-stop-v" class="button-demo">Stop</button>
+    <button id="continuous" class="button-demo">Start</button>
   </div>
   <span id="v-unsupported" class="hidden">API not supported</span>
-  <small class="author">
-    Demo created by <a href="http://www.audero.it">Aurelio De Rosa</a>
-    (<a href="https://twitter.com/AurelioDeRosa">@AurelioDeRosa</a>)
-  </small>
   <script>
     window.navigator = window.navigator || {};
+    let interval = null
     if (navigator.vibrate === undefined) {
       document.getElementById('v-unsupported').classList.remove('hidden');
       ['button-play-v-once', 'button-play-v-thrice', 'button-stop-v'].forEach(function(elementId) {
@@ -87,6 +85,19 @@
       document.getElementById('button-stop-v').addEventListener('click', function() {
         navigator.vibrate(0);
       });
+      document.getElementById('continuous').addEventListener('click', function () {
+        if (interval == null) {
+          interval = setInterval(function() {
+            navigator.vibrate([250,250,250,250])
+          }, 1000)
+          document.getElementById('continuous').innerText = 'Stop'
+        } else {
+          navigator.vibrate(0)
+          clearInterval(interval)
+          interval = null
+          document.getElementById('continuous').innerText = 'Start'
+        }
+      })
     }
   </script>
 
