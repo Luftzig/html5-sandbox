@@ -78,9 +78,10 @@
         if (state.playing === 'stopped') {
           const bpm = parseInt(document.getElementById("bpm").value)
           const beatSizeMs = ( 1000 / (bpm / 60) )
-          console.log("Using variable BPM", bpm, beatSizeMs)
           state.playing = 'playing'
-          navigator.vibrate([].fill([beatSizeMs, 3 * beatSizeMs], 200).flat(1))
+          const pattern = new Array(200).fill([beatSizeMs, 3 * beatSizeMs]).flat(1)
+          console.log("Playing with pattern: ", pattern)
+          navigator.vibrate(pattern)
           document.getElementById('continuous').innerText = 'Stop'
         } else {
           navigator.vibrate(0)
