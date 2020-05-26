@@ -67,7 +67,7 @@
   <span id="v-unsupported" class="hidden">API not supported</span>
   <script>
     window.navigator = window.navigator || {};
-    let interval = null
+    let state = {playing: 'stopped'}
     if (navigator.vibrate === undefined) {
       document.getElementById('v-unsupported').classList.remove('hidden');
       ['button-play-v-once', 'button-play-v-thrice', 'button-stop-v'].forEach(function(elementId) {
@@ -75,18 +75,16 @@
       });
     } else {
       document.getElementById('continuous').addEventListener('click', function () {
-        if (interval == null) {
+        if (state.playing === 'stopped') {
           const bpm = parseInt(document.getElementById("bpm").value)
           const beatSizeMs = ( 1000 / (bpm / 60) )
           console.log("Using variable BPM", bpm, beatSizeMs)
-          interval = setInterval(function() {
-            navigator.vibrate([].fill([beatSizeMs, 3 * beatSizeMs], 200).flat(1))
-          }, 1000)
+          state.playing = 'playing'
+          navigator.vibrate([].fill([beatSizeMs, 3 * beatSizeMs], 200).flat(1))
           document.getElementById('continuous').innerText = 'Stop'
         } else {
           navigator.vibrate(0)
-          clearInterval(interval)
-          interval = null
+          state.playing = 'stopped'
           document.getElementById('continuous').innerText = 'Start'
         }
       })
